@@ -1,0 +1,54 @@
+body {
+    background-color: #f5f5f5;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+}
+#outerDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "header header header"
+        "main main main"
+        "footer footer footer";
+    grid-gap: 10px;
+    background-color: #f5f5f5;
+    height: 100vh;
+}
+#keyboard {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-areas:
+        "e000 e001 e002 e003 eemp eemp eemp eemp e023 e022 e021 e020"
+        "e010 eem0 eem0 eem0 eemp eemp eemp eemp eem1 eem1 eem1 e030"
+        "e011 e012 eem5 e013 eemp eemp eemp eemp e043 e033 e032 e031"
+        "eem2 eem2 eem2 eem2 eemp eemp eemp eemp eem3 eem3 eem3 eem3";
+}
+.key {
+    width: 5em;
+    height: 5em;
+}
+.active {
+    background-color: #b03e3e;
+}
+header {
+    grid-area: header;
+    padding: 10px;
+}
+main {
+    grid-area: main;
+    padding: 10px;
+}
+footer {
+    grid-area: footer;
+    padding: 10px;
+    text-align: center;
+}
+h1 {
+    text-align: center;
+}

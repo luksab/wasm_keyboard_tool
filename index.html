@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Projects &ndash;Portfolio</title>
+        <meta
+            name="description"
+            content="code, electronics and everything in between"
+        />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" href="style.css" />
+        <script type="module" src="index.js"></script>
+        <!-- <script src="index.js"></script> -->
+    </head>
+    <body>
+        <!-- simple website with header and content using grid -->
+        <div id="outerDiv">
+            <header>
+                <h1>Projects</h1>
+            </header>
+            <main>
+                <div id="keyboard">
+                    <!-- 
+      /*
+      * ┌───┬───┬───┬───┐       ┌───┬───┬───┬───┐
+      * │000│001│002│003│       │023│022│021│020│
+      * └───┴───┴───┴───┘       └───┴───┴───┴───┘
+      *
+      *          ┌───┐             ┌───┐   
+      *          │010├───┐     ┌───┤030│   
+      *          ├───┤012│     │032├───┤   
+      *          │011├───┘     └───┤031│   
+      *          └───┘             └───┘   
+      */
+      format: `([L/R][Pinkie, Ring, Middle, Index, thumbL, thumbU, thumbD]+ [key]\n)+`
+                     -->
+                    <button class="key" id="key-000" style="grid-area: e000">LP</button>
+                    <button class="key" id="key-001" style="grid-area: e001">LR</button>
+                    <button class="key" id="key-002" style="grid-area: e002">LM</button>
+                    <button class="key" id="key-003" style="grid-area: e003">LI</button>
+                    <button class="key" id="key-023" style="grid-area: e023">RI</button>
+                    <button class="key" id="key-022" style="grid-area: e022">RM</button>
+                    <button class="key" id="key-021" style="grid-area: e021">RR</button>
+                    <button class="key" id="key-020" style="grid-area: e020">RP</button>
+                    <button class="key" id="key-010" style="grid-area: e010">LU</button>
+                    <button class="key" id="key-011" style="grid-area: e011">LD</button>
+                    <button class="key" id="key-012" style="grid-area: e012">LL</button>
+                    <button class="key" id="key-030" style="grid-area: e030">RU</button>
+                    <button class="key" id="key-031" style="grid-area: e031">RD</button>
+                    <button class="key" id="key-032" style="grid-area: e032">RL</button>
+                </div>
+            </main>
+            <footer>
+                <p>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="projects.html">Projects</a>
+                    <a href="contact.html">Contact</a>
+                </p>
+            </footer>
+        </div>
+    </body>
+</html>
