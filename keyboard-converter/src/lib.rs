@@ -389,14 +389,21 @@ impl Config {
         combos.sort_by(|a, b| b.cmp(&a));
         
         for combo in combos.iter() {
-            let mut finger_combo = 0;
-            for finger in &combo.fingers {
-                finger_combo |= *finger as u16;
-            }
+            // let mut finger_combo = 0;
+            // for finger in &combo.fingers {
+            //     finger_combo |= *finger as u16;
+            // }
+            let finger_combo = combo
+                .fingers
+                .iter()
+                .map(|finger| format!("Finger::{} as u16", finger))
+                .collect::<Vec<String>>()
+                .join(" | ");
             let key = combo.key.clone();
             let key = match Key::from_str(&key) {
                 Ok(key) => {
-                    out += &format!("Chord::new(0b{:016b}, Key::{:?}),\n", finger_combo, key)
+                    // out += &format!("Chord::new(0b{:016b}, Key::{:?}),\n", finger_combo, key)
+                    out += &format!("Chord::new({}, Key::{:?}),\n", finger_combo, key)
                 }
                 Err(_) => {
                     console::log_1(&format!("could not parse key: {}", key).into());
