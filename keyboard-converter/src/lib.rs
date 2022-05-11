@@ -100,6 +100,22 @@ impl fmt::Display for Combo {
     }
 }
 
+// implement ord based on the number of words in the combo key
+impl Ord for Combo {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        self.key
+            .split_whitespace()
+            .count()
+            .cmp(&other.key.split_whitespace().count())
+    }
+}
+
+impl PartialOrd for Combo {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 #[derive(Debug)]
 #[wasm_bindgen]
 pub struct Config {
@@ -371,20 +387,24 @@ impl Config {
     pub fn to_keychordz(&self) -> Result<String, String> {
         let mut out = String::new();
 
-        for combo in self.combos.iter() {
+        // sort self.combos by key reversed
+        let mut combos = self.combos.clone();
+        combos.sort_by(|a, b| b.key.cmp(&a.key));
+        for combo in combos.iter() {
             let mut finger_combo = 0;
             for finger in &combo.fingers {
                 finger_combo |= *finger as u16;
             }
             let key = combo.key.clone();
             let key = match Key::from_str(&key) {
-                Ok(key) => out += &format!("Chord::new(0b{:016b}, Key::{:?}),\n", finger_combo, key),
+                Ok(key) => {
+                    out += &format!("Chord::new(0b{:016b}, Key::{:?}),\n", finger_combo, key)
+                }
                 Err(_) => {
                     console::log_1(&format!("could not parse key: {}", key).into());
                     continue;
                 }
             };
-            
         }
 
         Ok(out)
