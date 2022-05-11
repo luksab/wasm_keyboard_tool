@@ -21,6 +21,7 @@ init().then(async () => {
     // console.log(await config.text());
     window.config = Config.from_str(config);
     console.log(window.config.check());
+    console.log(window.config.to_keychordz());
 });
 
 const fingersPressed = {

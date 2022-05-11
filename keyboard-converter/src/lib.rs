@@ -13,6 +13,8 @@ use std::{collections::HashSet, fmt, str::FromStr};
 use strum::{EnumCount, VariantNames};
 use strum_macros::{Display, EnumCount as EnumCountMacro, EnumString, EnumVariantNames};
 
+use defines::*;
+
 // [L/R] [Pinkie, Ring, Middle, Index, thumbL, thumbU, thumbD]
 #[derive(
     EnumString,
@@ -29,23 +31,24 @@ use strum_macros::{Display, EnumCount as EnumCountMacro, EnumString, EnumVariant
     EnumVariantNames,
     EnumCountMacro,
 )]
-#[repr(u8)]
+#[repr(u16)]
 #[wasm_bindgen]
 pub enum Finger {
-    LP,
-    LR,
-    LM,
-    LI,
-    RI,
-    RM,
-    RR,
-    RP,
-    LU,
-    LD,
-    LL,
-    RU,
-    RD,
-    RL,
+    LP = 0b0100000000000000,
+    LR = 0b0010000000000000,
+    LM = 0b0001000000000000,
+    LI = 0b0000100000000000,
+    LU = 0b0000010000000000,
+    LD = 0b0000001000000000,
+    LL = 0b0000000100000000,
+
+    RP = 0b0000000001000000,
+    RR = 0b0000000000100000,
+    RM = 0b0000000000010000,
+    RI = 0b0000000000001000,
+    RU = 0b0000000000000100,
+    RD = 0b0000000000000010,
+    RL = 0b0000000000000001,
 }
 
 // #[wasm_bindgen]
@@ -199,20 +202,21 @@ impl Config {
     pub fn check(&self) -> Result<(), String> {
         self.check_dup()?;
         self.check_dup_in_combo()?;
-        self.check_all_single()?;
+        // self.check_all_single()?;
         Ok(())
     }
 }
 
 #[wasm_bindgen]
 impl Config {
+    /// get what pressing each finger will do
     pub fn get_key_with_fingers(&self, fingers: Array) -> JsValue {
         let fingers = fingers
             .iter()
             .map(|f| f.as_string().unwrap_or_default())
             .map(|f| Finger::from_str(f.to_uppercase().as_str()).unwrap_or(Finger::LP))
             .collect::<Vec<Finger>>();
-        let str = format!("{:?}", fingers);
+        // let str = format!("{:?}", fingers);
         // console::log_1(&str.into());
         let values = self.get_key_with_fingers_rs(fingers);
         return JsValue::from(
@@ -223,6 +227,7 @@ impl Config {
         );
     }
 
+    /// gets called by `get_key_with_fingers`
     fn get_key_with_fingers_rs(&self, fingers: Vec<Finger>) -> Vec<String> {
         let mut key_with_finger = vec!["".to_string(); 15];
         for combo in &self.combos {
@@ -284,7 +289,7 @@ impl Config {
             if key.is_none() {
                 return Err(format!(
                     "Finger {} is not mapped",
-                    Finger::try_from(i as u8).unwrap()
+                    Finger::try_from(i as u16).unwrap()
                 ));
             }
         }
@@ -361,5 +366,27 @@ impl Config {
             key_combos_out,
             self.combos.len() - Finger::COUNT,
         ))
+    }
+
+    pub fn to_keychordz(&self) -> Result<String, String> {
+        let mut out = String::new();
+
+        for combo in self.combos.iter() {
+            let mut finger_combo = 0;
+            for finger in &combo.fingers {
+                finger_combo |= *finger as u16;
+            }
+            let key = combo.key.clone();
+            let key = match Key::from_str(&key) {
+                Ok(key) => out += &format!("Chord::new(0b{:016b}, Key::{:?}),\n", finger_combo, key),
+                Err(_) => {
+                    console::log_1(&format!("could not parse key: {}", key).into());
+                    continue;
+                }
+            };
+            
+        }
+
+        Ok(out)
     }
 }

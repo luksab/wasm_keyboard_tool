@@ -18,6 +18,7 @@ num_enum = "0.5"
 wasm-bindgen = "0.2"
 js-sys = "0.3.57"
 
+defines = { path = "../../firmware/defines" }
 
 [dependencies.web-sys]
 version = "0.3.57"
