@@ -100,13 +100,10 @@ impl fmt::Display for Combo {
     }
 }
 
-// implement ord based on the number of words in the combo key
+// implement ord based on the number of fingers
 impl Ord for Combo {
     fn cmp(&self, other: &Self) -> core::cmp::Ordering {
-        self.key
-            .split_whitespace()
-            .count()
-            .cmp(&other.key.split_whitespace().count())
+        self.fingers.len().cmp(&other.fingers.len())
     }
 }
 
@@ -389,7 +386,8 @@ impl Config {
 
         // sort self.combos by key reversed
         let mut combos = self.combos.clone();
-        combos.sort_by(|a, b| b.key.cmp(&a.key));
+        combos.sort_by(|a, b| b.cmp(&a));
+        
         for combo in combos.iter() {
             let mut finger_combo = 0;
             for finger in &combo.fingers {
